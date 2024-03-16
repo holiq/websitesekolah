@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
@@ -16,9 +17,17 @@ use App\Models\Client_model;
 
 class Home extends BaseController
 {
+    protected $konfigurasi_model;
+    protected $galeri_model;
+    protected $berita_model;
+    protected $staff_model;
+    protected $prestasi_model;
+    protected $video_model;
+    protected $client_model;
+
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-       parent::initController($request, $response, $logger);
+        parent::initController($request, $response, $logger);
         $this->konfigurasi_model    = new Konfigurasi_model();
         $this->galeri_model         = new Galeri_model();
         $this->berita_model         = new Berita_model();
@@ -35,41 +44,43 @@ class Home extends BaseController
         $galeri     = $this->galeri_model->jenis_galeri_pop('Homepage');
         $popup      = $this->galeri_model->jenis_galeri_pop('Pop Up');
         $keunggulan = $this->berita_model->jenis_publish('Keunggulan');
-        $berita     = $this->berita_model->beranda('Berita',6);
+        $berita     = $this->berita_model->beranda('Berita', 6);
         $staff      = $this->staff_model->home(6);
-        $prestasi   = $this->prestasi_model->home(6,'Publish');
+        $prestasi   = $this->prestasi_model->home(6, 'Publish');
         $video      = $this->video_model->home();
         $client     = $this->client_model->home();
 
-        $data = [   'title'         => $site->namaweb.' | '.$site->tagline,
-                    'description'   => $site->deskripsi,
-                    'keywords'      => $site->keywords,
-                    'site'          => $site,
-                    'slider'        => $galeri,
-                    'popup'         => $popup,
-                    'keunggulan'    => $keunggulan,
-                    'berita'        => $berita,
-                    'staff'         => $staff,
-                    'prestasi'      => $prestasi,
-                    'video'         => $video,
-                    'client'        => $client,
-                    'content'       => 'home/index'
-                ];
-        return view('layout/wrapper',$data);
+        $data = [
+            'title'         => $site->namaweb . ' | ' . $site->tagline,
+            'description'   => $site->deskripsi,
+            'keywords'      => $site->keywords,
+            'site'          => $site,
+            'slider'        => $galeri,
+            'popup'         => $popup,
+            'keunggulan'    => $keunggulan,
+            'berita'        => $berita,
+            'staff'         => $staff,
+            'prestasi'      => $prestasi,
+            'video'         => $video,
+            'client'        => $client,
+            'content'       => 'home/index'
+        ];
+        return view('layout/wrapper', $data);
     }
 
     // oops
     public function oops()
     {
-        $m_site     = new Konfigurasi_model();
-        $site       = $m_site->listing();
-        $data = [   'title'         => 'Oops... Mohon Maaf',
-                    'description'   => 'Oops... Mohon Maaf',
-                    'keywords'      => 'Oops... Mohon Maaf',
-                    'site'          => $site,
-                    'content'       => 'home/oops'
-                ];
-        return view('layout/wrapper',$data);
+        $m_site = new Konfigurasi_model();
+        $site = $m_site->listing();
+        $data = [
+            'title'         => 'Oops... Mohon Maaf',
+            'description'   => 'Oops... Mohon Maaf',
+            'keywords'      => 'Oops... Mohon Maaf',
+            'site'          => $site,
+            'content'       => 'home/oops'
+        ];
+        return view('layout/wrapper', $data);
     }
 
     // welcome
@@ -77,5 +88,4 @@ class Home extends BaseController
     {
         return view('welcome_message');
     }
-
 }
